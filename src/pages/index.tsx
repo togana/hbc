@@ -11,7 +11,7 @@ type props = {
 const ImageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1px;
+  gap: 2px;
 `;
 
 export default function Home({ cats }: props): JSX.Element {
