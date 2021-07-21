@@ -28,12 +28,7 @@ export default function Home({ cats }: props): JSX.Element {
       </Head>
 
       <Header>
-        <Image
-          src="/Logo.png"
-          alt="logo"
-          width="540"
-          height="283"
-        />
+        <Image src="/Logo.png" alt="logo" width="540" height="283" />
       </Header>
       <main>
         <ImageContainer>
