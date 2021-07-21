@@ -14,6 +14,12 @@ const ImageContainer = styled.div`
   gap: 2px;
 `;
 
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export default function Home({ cats }: props): JSX.Element {
   return (
     <div>
@@ -21,6 +27,14 @@ export default function Home({ cats }: props): JSX.Element {
         <title>Healing by cat</title>
       </Head>
 
+      <Header>
+        <Image
+          src="/Logo.png"
+          alt="logo"
+          width="540"
+          height="283"
+        />
+      </Header>
       <main>
         <ImageContainer>
           {cats.map((cat) => (
