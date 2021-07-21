@@ -1,3 +1,14 @@
 {
-  "extends": ["eslint:recommended", "next", "next/core-web-vitals", "prettier"]
+  "env": {
+    "browser": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next",
+    "next/core-web-vitals",
+    "prettier"
+  ]
 }
