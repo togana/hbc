@@ -5,8 +5,6 @@ export default function Home() {
     <div>
       <Head>
         <title>Healing by cat</title>
-        <meta name="description" content="Healing by cat" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
