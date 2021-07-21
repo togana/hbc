@@ -31,6 +31,7 @@ export default function Home({ cats }: props): JSX.Element {
               width="500"
               height="500"
               objectFit="cover"
+              loading="eager"
             />
           ))}
         </ImageContainer>
