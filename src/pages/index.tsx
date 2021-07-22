@@ -61,6 +61,6 @@ export async function getStaticProps(): Promise<{
     props: {
       cats,
     },
-    revalidate: 1,
+    revalidate: 500,
   };
 }
