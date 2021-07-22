@@ -16,9 +16,9 @@ type cat = {
 export type cats = cat[];
 
 const imagekit = new ImageKit({
-  publicKey : process.env.IMAGEKIT_PUBLIC_KEY,
-  privateKey : process.env.IMAGEKIT_PRIVATE_KEY,
-  urlEndpoint : process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '',
 });
 
 export const search = async ({
@@ -35,16 +35,18 @@ export const search = async ({
     },
   });
 
-  const signedUrls = res.data.map(cat =>  {
+  const signedUrls = res.data.map((cat) => {
     const imageURL = imagekit.url({
       path: encodeURIComponent(cat.url),
-      transformation : [{
-          width: 500,
-          quality: 75,
-      }],
-      signed : true,
-      expireSeconds : 300
-  });
+      transformation: [
+        {
+          width: '500',
+          quality: '75',
+        },
+      ],
+      signed: true,
+      expireSeconds: 300,
+    });
     return {
       id: cat.id,
       url: imageURL,
