@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styled from '@emotion/styled';
 import { search } from '../api/cat';
 import type { cats } from '../api/cat';
@@ -11,7 +10,14 @@ type props = {
 const ImageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: calc(100vw / 5);
   gap: 2px;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: calc(100vw /5);
+  object-fit: cover;
 `;
 
 const Header = styled.header`
@@ -39,7 +45,6 @@ export default function Home({ cats }: props): JSX.Element {
               alt=""
               width="500"
               height="500"
-              objectFit="cover"
               loading="eager"
             />
           ))}
@@ -61,6 +66,6 @@ export async function getStaticProps(): Promise<{
     props: {
       cats,
     },
-    revalidate: 500,
+    revalidate: 60,
   };
 }
