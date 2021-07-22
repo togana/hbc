@@ -1,3 +1,4 @@
+import ImageKit from 'imagekit';
 import fetcher from '../lib/apiClient';
 
 type order = 'desc' | 'asc' | 'random';
@@ -14,6 +15,12 @@ type cat = {
 
 export type cats = cat[];
 
+const imagekit = new ImageKit({
+  publicKey : process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey : process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint : process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT
+});
+
 export const search = async ({
   page = 1,
   limit = 30,
@@ -27,5 +34,21 @@ export const search = async ({
       mime_types: 'jpg,png',
     },
   });
-  return res.data;
+
+  const signedUrls = res.data.map(cat =>  {
+    const imageURL = imagekit.url({
+      path: encodeURIComponent(cat.url),
+      transformation : [{
+          width: 500,
+          quality: 75,
+      }],
+      signed : true,
+      expireSeconds : 300
+  });
+    return {
+      id: cat.id,
+      url: imageURL,
+    };
+  });
+  return signedUrls;
 };
