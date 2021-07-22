@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import { search } from '../api/cat';
-import type { cats } from '../api/cat';
+import { search } from '../api/external/cats';
+import type { Cats } from '../api/external/cats';
 import imagekitLoader from '../lib/imagekitLoader';
 
-type props = {
-  cats: cats;
+type Props = {
+  cats: Cats;
 };
 
 const ImageContainer = styled.div`
@@ -22,7 +22,7 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-export default function Home({ cats }: props): JSX.Element {
+export default function Home({ cats }: Props): JSX.Element {
   return (
     <div>
       <Head>
@@ -53,7 +53,7 @@ export default function Home({ cats }: props): JSX.Element {
 }
 
 export async function getStaticProps(): Promise<{
-  props: props;
+  props: Props;
   revalidate: number;
 }> {
   const cats = await search({

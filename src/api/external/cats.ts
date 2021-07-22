@@ -1,19 +1,20 @@
 import ImageKit from 'imagekit';
-import fetcher from '../lib/apiClient';
+import fetcher from '../../lib/apiClient';
 
-type order = 'desc' | 'asc' | 'random';
-type request = {
-  order?: order;
+type Order = 'desc' | 'asc' | 'random';
+
+export type CatsRequest = {
+  order?: Order;
   page?: number;
   limit?: number;
 };
 
-type cat = {
+type Cat = {
   id: string;
   url: string;
 };
 
-export type cats = cat[];
+export type Cats = Cat[];
 
 const imagekit = new ImageKit({
   publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
@@ -25,8 +26,8 @@ export const search = async ({
   page = 1,
   limit = 30,
   order: order = 'desc',
-}: request): Promise<cats> => {
-  const res = await fetcher.get<cats>('/v1/images/search', {
+}: CatsRequest): Promise<Cats> => {
+  const res = await fetcher.get<Cats>('/v1/images/search', {
     params: {
       page,
       limit,
