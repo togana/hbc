@@ -45,7 +45,7 @@ export const search = async ({
         },
       ],
       signed: true,
-      expireSeconds: 300,
+      expireSeconds: 3600 * 24,
     });
     return {
       id: cat.id,
