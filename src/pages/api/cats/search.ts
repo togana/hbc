@@ -10,9 +10,9 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Cats>,
 ): Promise<void> => {
-  // 1~100以外の値の場合は一旦バリデーションエラにする
+  // 1~50以外の値の場合は一旦バリデーションエラにする
   const page = Number(req.query?.page || 1);
-  if (!inRange(page, 0, 10)) {
+  if (!inRange(page, 0, 50)) {
     res.status(422).json([]);
     return;
   }

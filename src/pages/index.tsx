@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -23,8 +24,32 @@ const Header = styled.header`
   justify-content: center;
 `;
 
+const getScrollBottom = () => {
+  const body = window.document.body;
+  const html = window.document.documentElement;
+  const scrollTop = body.scrollTop || html.scrollTop;
+  return html.scrollHeight - html.clientHeight - scrollTop;
+};
+
 export default function Home({ cats }: Props): JSX.Element {
-  const { data, setSize } = useCatsInfinite();
+  const { data, size, setSize } = useCatsInfinite();
+
+  useEffect(() => {
+    let isSend = true;
+    const handleScroll = () => {
+      if (
+        isSend &&
+        getScrollBottom() < 1800 &&
+        data &&
+        typeof data[size - 1] !== 'undefined'
+      ) {
+        isSend = false;
+        setSize(size + 1);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [data, setSize, size]);
 
   return (
     <div>
@@ -35,7 +60,6 @@ export default function Home({ cats }: Props): JSX.Element {
       <Header>
         <Image src="/Logo.png" alt="logo" width="540" height="283" />
       </Header>
-      <button onClick={() => setSize((size) => size + 1)}>Load More</button>
       <main>
         <ImageContainer>
           {cats.map((cat) => (
@@ -60,7 +84,7 @@ export default function Home({ cats }: Props): JSX.Element {
                 width="500"
                 height="500"
                 objectFit="cover"
-                loading="eager"
+                loading="lazy"
               />
             )),
           )}
