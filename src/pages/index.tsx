@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { search } from '../api/external/cats';
 import type { Cats } from '../api/external/cats';
+import { useCatsInfinite } from '../hooks/useCatsInfinite';
 import imagekitLoader from '../lib/imagekitLoader';
 
 type Props = {
@@ -23,6 +24,8 @@ const Header = styled.header`
 `;
 
 export default function Home({ cats }: Props): JSX.Element {
+  const { data, setSize } = useCatsInfinite();
+
   return (
     <div>
       <Head>
@@ -32,6 +35,7 @@ export default function Home({ cats }: Props): JSX.Element {
       <Header>
         <Image src="/Logo.png" alt="logo" width="540" height="283" />
       </Header>
+      <button onClick={() => setSize((size) => size + 1)}>Load More</button>
       <main>
         <ImageContainer>
           {cats.map((cat) => (
@@ -46,6 +50,20 @@ export default function Home({ cats }: Props): JSX.Element {
               loading="eager"
             />
           ))}
+          {data?.map((cats) =>
+            cats.map((cat) => (
+              <Image
+                key={cat.id}
+                src={cat.url}
+                loader={imagekitLoader}
+                alt=""
+                width="500"
+                height="500"
+                objectFit="cover"
+                loading="eager"
+              />
+            )),
+          )}
         </ImageContainer>
       </main>
     </div>
