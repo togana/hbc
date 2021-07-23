@@ -9,6 +9,7 @@
     "lint": "run-p lint:*",
     "lint:eslint": "next lint",
     "lint:prettier": "prettier --check .",
+    "lint:tsc": "tsc --noEmit",
     "format": "prettier --write ."
   },
   "dependencies": {
