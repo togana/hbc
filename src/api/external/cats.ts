@@ -24,7 +24,7 @@ const imagekit = new ImageKit({
 
 export const search = async ({
   page = 1,
-  limit = 30,
+  limit = 50,
   order: order = 'desc',
 }: CatsRequest): Promise<Cats> => {
   const res = await fetcher.get<Cats>('/v1/images/search', {

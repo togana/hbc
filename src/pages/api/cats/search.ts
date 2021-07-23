@@ -19,7 +19,7 @@ const handler = async (
 
   const externalResponse = await search({
     page,
-    limit: 30,
+    limit: 50,
     order: 'random',
   });
   res.status(200).json(externalResponse);
