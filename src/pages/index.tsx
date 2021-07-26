@@ -100,7 +100,7 @@ export default function Home({ cats }: Props): JSX.Element {
                 width="500"
                 height="500"
                 objectFit="cover"
-                loading="lazy"
+                loading="eager"
               />
             )),
           )}
