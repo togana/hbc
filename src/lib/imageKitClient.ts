@@ -1,6 +1,4 @@
 import ImageKit from 'imagekit';
-import dotenv from 'dotenv';
-dotenv.config();
 
 const baseUrl = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '';
 
