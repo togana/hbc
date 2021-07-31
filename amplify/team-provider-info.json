@@ -1,0 +1,15 @@
+{
+  "production": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hbc-production-132004-authRole",
+      "UnauthRoleArn": "arn:aws:iam::239411788922:role/amplify-hbc-production-132004-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::239411788922:role/amplify-hbc-production-132004-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-hbc-production-132004-deployment",
+      "UnauthRoleName": "amplify-hbc-production-132004-unauthRole",
+      "StackName": "amplify-hbc-production-132004",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:239411788922:stack/amplify-hbc-production-132004/96ea4710-f1b6-11eb-bc58-0af9a66ebaed",
+      "AmplifyAppId": "d1d7r756ckwte6"
+    }
+  }
+}
