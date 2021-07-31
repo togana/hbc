@@ -1,4 +1,4 @@
-import ImageKit from 'imagekit';
+import { imagekit } from '../../lib/imageKitClient';
 import fetcher from '../../lib/apiClient';
 
 type Order = 'desc' | 'asc' | 'random';
@@ -15,12 +15,6 @@ type Cat = {
 };
 
 export type Cats = Cat[];
-
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
-  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT || '',
-});
 
 export const search = async ({
   page = 1,
