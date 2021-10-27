@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -47,7 +47,17 @@ const getScrollBottom = () => {
   return html.scrollHeight - html.clientHeight - scrollTop;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const shuffle = <T extends any[]>([...array]: T): T => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array as T;
+}
+
 export default function Home({ cats }: Props): JSX.Element {
+  const [list, setList] = useState(shuffle(cats));
   const { data, size, setSize } = useCatsInfinite();
 
   useEffect(() => {
@@ -55,14 +65,18 @@ export default function Home({ cats }: Props): JSX.Element {
     const handleScroll = () => {
       if (
         isSend &&
-        getScrollBottom() < 1800 &&
+        getScrollBottom() < 3800 &&
         data &&
         typeof data[size - 1] !== 'undefined'
       ) {
         isSend = false;
-        setSize(size + 1);
+        setSize((current) => current + 1);
+        setList((current) => [...current, ...data[size - 1]]);
       }
     };
+    if (data?.length === size) {
+      handleScroll();
+    }
     window.addEventListener('scroll', handleScroll, true);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [data, setSize, size]);
@@ -78,7 +92,7 @@ export default function Home({ cats }: Props): JSX.Element {
       </Header>
       <main>
         <ImageContainer>
-          {cats.map((cat) => (
+          {list.map((cat) => (
             <Image
               key={cat.id}
               src={cat.url}
@@ -90,20 +104,6 @@ export default function Home({ cats }: Props): JSX.Element {
               loading="eager"
             />
           ))}
-          {data?.map((cats) =>
-            cats.map((cat) => (
-              <Image
-                key={cat.id}
-                src={cat.url}
-                loader={imagekitLoader}
-                alt=""
-                width="500"
-                height="500"
-                objectFit="cover"
-                loading="eager"
-              />
-            )),
-          )}
         </ImageContainer>
       </main>
     </div>
@@ -114,14 +114,14 @@ export async function getStaticProps(): Promise<{
   props: Props;
   revalidate: number;
 }> {
-  const cats = await search({
+  const catsResponses = await Promise.all([...Array(5)].map(() => search({
     order: 'random',
-  });
+  })));
 
   return {
     props: {
-      cats,
+      cats: catsResponses.flat(),
     },
-    revalidate: 60,
+    revalidate: 600,
   };
 }
