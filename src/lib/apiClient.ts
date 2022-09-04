@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const headers = {
-  'x-api-key': process.env.API_KEY,
+  'x-api-key': process.env.API_KEY ?? '',
 };
 
 const instance = axios.create({
