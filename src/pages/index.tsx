@@ -18,17 +18,17 @@ const ImageContainer = styled.div`
   grid-auto-rows: calc(100vw / 5);
   gap: 2px;
 
-  ${down('md')} {
+  ${down('lg')} {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: calc(100vw / 3);
   }
 
-  ${down('sm')} {
+  ${down('md')} {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: calc(100vw / 2);
   }
 
-  ${down('xs')} {
+  ${down('sm')} {
     grid-template-columns: repeat(1, 1fr);
     grid-auto-rows: calc(100vw);
   }
@@ -54,7 +54,7 @@ const shuffle = <T extends any[]>([...array]: T): T => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array as T;
-}
+};
 
 export default function Home({ cats }: Props): JSX.Element {
   const [list, setList] = useState(shuffle(cats));
@@ -114,9 +114,13 @@ export async function getStaticProps(): Promise<{
   props: Props;
   revalidate: number;
 }> {
-  const catsResponses = await Promise.all([...Array(5)].map(() => search({
-    order: 'random',
-  })));
+  const catsResponses = await Promise.all(
+    [...Array(5)].map(() =>
+      search({
+        order: 'random',
+      }),
+    ),
+  );
 
   return {
     props: {
