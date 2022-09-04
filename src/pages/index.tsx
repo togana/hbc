@@ -54,7 +54,7 @@ const shuffle = <T extends any[]>([...array]: T): T => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array as T;
-}
+};
 
 export default function Home({ cats }: Props): JSX.Element {
   const [list, setList] = useState(shuffle(cats));
@@ -114,9 +114,13 @@ export async function getStaticProps(): Promise<{
   props: Props;
   revalidate: number;
 }> {
-  const catsResponses = await Promise.all([...Array(5)].map(() => search({
-    order: 'random',
-  })));
+  const catsResponses = await Promise.all(
+    [...Array(5)].map(() =>
+      search({
+        order: 'random',
+      }),
+    ),
+  );
 
   return {
     props: {
