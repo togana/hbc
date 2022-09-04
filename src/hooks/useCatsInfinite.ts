@@ -1,4 +1,4 @@
-import { useSWRInfinite } from 'swr';
+import useSWRInfinite from 'swr/infinite';
 import type { KeyLoader } from 'swr';
 import type { Cats } from '../api/external/cats';
 import { fetcher } from '../lib/fetcher';

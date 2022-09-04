@@ -18,17 +18,17 @@ const ImageContainer = styled.div`
   grid-auto-rows: calc(100vw / 5);
   gap: 2px;
 
-  ${down('md')} {
+  ${down('lg')} {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: calc(100vw / 3);
   }
 
-  ${down('sm')} {
+  ${down('md')} {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: calc(100vw / 2);
   }
 
-  ${down('xs')} {
+  ${down('sm')} {
     grid-template-columns: repeat(1, 1fr);
     grid-auto-rows: calc(100vw);
   }
