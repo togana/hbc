@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { down } from 'styled-breakpoints';
+import { VirtuosoGrid } from 'react-virtuoso'
 import { search } from '../api/external/cats';
 import type { Cats } from '../api/external/cats';
 import { useCatsInfinite } from '../hooks/useCatsInfinite';
@@ -12,7 +13,7 @@ type Props = {
   cats: Cats;
 };
 
-const ImageContainer = styled.div`
+const ListElement = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-auto-rows: calc(100vw / 5);
@@ -34,21 +35,18 @@ const ImageContainer = styled.div`
   }
 `;
 
+const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
+  return <ListElement {...props} ref={ref} />
+})
+ListContainer.displayName = 'List';
+
 const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const getScrollBottom = () => {
-  const body = window.document.body;
-  const html = window.document.documentElement;
-  const scrollTop = body.scrollTop || html.scrollTop;
-  return html.scrollHeight - html.clientHeight - scrollTop;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const shuffle = <T extends any[]>([...array]: T): T => {
+const shuffle = <T extends Cats>([...array]: T): T => {
   for (let i = array.length - 1; i >= 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -61,25 +59,20 @@ export default function Home({ cats }: Props): JSX.Element {
   const { data, size, setSize } = useCatsInfinite();
 
   useEffect(() => {
-    let isSend = true;
     const handleScroll = () => {
       if (
-        isSend &&
-        getScrollBottom() < 3800 &&
         data &&
         typeof data[size - 1] !== 'undefined'
       ) {
-        isSend = false;
-        setSize((current) => current + 1);
         setList((current) => [...current, ...data[size - 1]]);
       }
     };
-    if (data?.length === size) {
-      handleScroll();
-    }
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [data, setSize, size]);
+    handleScroll();
+  }, [data, size]);
+
+  const loadMore = useCallback(() => {
+    setSize((current) => current + 1);
+  }, [setSize])
 
   return (
     <div>
@@ -88,23 +81,30 @@ export default function Home({ cats }: Props): JSX.Element {
       </Head>
 
       <Header>
-        <Image src="/Logo.png" alt="logo" width="540" height="283" />
+        <Image src="/Logo.png" alt="logo" priority width="540" height="283" />
       </Header>
       <main>
-        <ImageContainer>
-          {list.map((cat) => (
-            <Image
-              key={cat.id}
-              src={cat.url}
-              loader={imagekitLoader}
-              alt=""
-              width="500"
-              height="500"
-              objectFit="cover"
-              loading="eager"
-            />
-          ))}
-        </ImageContainer>
+        <VirtuosoGrid
+          overscan={2500}
+          totalCount={list.length}
+          components={{
+            List: ListContainer,
+          }}
+          useWindowScroll={true}
+          itemContent={(index) => <Image
+            key={list[index].id}
+            src={list[index].url}
+            loader={imagekitLoader}
+            alt=""
+            unoptimized
+            width="500"
+            height="500"
+            objectFit="cover"
+            loading="eager"
+          />
+          }
+          endReached={loadMore}
+        />
       </main>
     </div>
   );
