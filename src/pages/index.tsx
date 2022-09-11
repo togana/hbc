@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { down } from 'styled-breakpoints';
+import { VirtuosoGrid } from 'react-virtuoso'
 import { search } from '../api/external/cats';
 import type { Cats } from '../api/external/cats';
 import { useCatsInfinite } from '../hooks/useCatsInfinite';
@@ -12,7 +13,7 @@ type Props = {
   cats: Cats;
 };
 
-const ImageContainer = styled.div`
+const ListElement = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-auto-rows: calc(100vw / 5);
@@ -33,6 +34,11 @@ const ImageContainer = styled.div`
     grid-auto-rows: calc(100vw);
   }
 `;
+
+const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
+  return <ListElement {...props} ref={ref} />
+})
+ListContainer.displayName = 'List';
 
 const Header = styled.header`
   display: flex;
@@ -90,20 +96,26 @@ export default function Home({ cats }: Props): JSX.Element {
         <Image src="/Logo.png" alt="logo" priority width="540" height="283" />
       </Header>
       <main>
-        <ImageContainer>
-          {list.map((cat) => (
-            <Image
-              key={cat.id}
-              src={cat.url}
-              loader={imagekitLoader}
-              alt=""
-              width="500"
-              height="500"
-              objectFit="cover"
-              loading="eager"
-            />
-          ))}
-        </ImageContainer>
+        <VirtuosoGrid
+          overscan={2500}
+          totalCount={list.length}
+          components={{
+            List: ListContainer,
+          }}
+          useWindowScroll={true}
+          itemContent={(index) => <Image
+            key={list[index].id}
+            src={list[index].url}
+            loader={imagekitLoader}
+            alt=""
+            unoptimized
+            width="500"
+            height="500"
+            objectFit="cover"
+            loading="eager"
+          />
+          }
+        />
       </main>
     </div>
   );
