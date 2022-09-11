@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -46,13 +46,6 @@ const Header = styled.header`
   justify-content: center;
 `;
 
-const getScrollBottom = () => {
-  const body = window.document.body;
-  const html = window.document.documentElement;
-  const scrollTop = body.scrollTop || html.scrollTop;
-  return html.scrollHeight - html.clientHeight - scrollTop;
-};
-
 const shuffle = <T extends Cats>([...array]: T): T => {
   for (let i = array.length - 1; i >= 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -66,25 +59,20 @@ export default function Home({ cats }: Props): JSX.Element {
   const { data, size, setSize } = useCatsInfinite();
 
   useEffect(() => {
-    let isSend = true;
     const handleScroll = () => {
       if (
-        isSend &&
-        getScrollBottom() < 3800 &&
         data &&
         typeof data[size - 1] !== 'undefined'
       ) {
-        isSend = false;
-        setSize((current) => current + 1);
         setList((current) => [...current, ...data[size - 1]]);
       }
     };
-    if (data?.length === size) {
-      handleScroll();
-    }
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [data, setSize, size]);
+    handleScroll();
+  }, [data, size]);
+
+  const loadMore = useCallback(() => {
+    setSize((current) => current + 1);
+  }, [setSize])
 
   return (
     <div>
@@ -115,6 +103,7 @@ export default function Home({ cats }: Props): JSX.Element {
             loading="eager"
           />
           }
+          endReached={loadMore}
         />
       </main>
     </div>
