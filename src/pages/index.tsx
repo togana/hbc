@@ -88,7 +88,7 @@ export default function Home({ cats }: Props): JSX.Element {
       </Head>
 
       <Header>
-        <Image src="/Logo.png" alt="logo" width="540" height="283" />
+        <Image src="/Logo.png" alt="logo" priority width="540" height="283" />
       </Header>
       <main>
         <ImageContainer>
