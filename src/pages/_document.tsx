@@ -3,7 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 class MyDocument extends Document {
   render(): JSX.Element {
     return (
-      <Html>
+      <Html lang='ja'>
         <Head>
           <meta name="description" content="Healing by cat" />
           <link rel="icon" href="/favicon.ico" />
