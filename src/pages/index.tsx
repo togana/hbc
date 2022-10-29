@@ -99,8 +99,11 @@ export default function Home({ cats }: Props): JSX.Element {
             unoptimized
             width="500"
             height="500"
-            objectFit="cover"
             loading="eager"
+            style={{
+              maxHeight: '100%',
+              objectFit: 'cover',
+            }}
           />
           }
           endReached={loadMore}
