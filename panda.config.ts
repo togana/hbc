@@ -21,8 +21,6 @@ export default defineConfig({
       margin: 0,
       minHeight: '100%',
       backgroundColor: '#000',
-      fontFamily: 'var(--font-roboto), var(--font-noto-sans-jp), sans-serif',
-      fontSize: '16px',
     },
   },
   jsxFramework: 'react',
