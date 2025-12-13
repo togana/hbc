@@ -7,58 +7,14 @@ import type { Cats } from '../api/cats-api';
 import { useCatsInfinite } from '../hooks/use-cats-infinite';
 import imagekitLoader from '../../../lib/imagekit-loader';
 
-// #region agent log
-const debugLog = (location: string, message: string, data: Record<string, unknown>, hypothesisId: string) => {
-  fetch('http://127.0.0.1:7242/ingest/ea7c6cb7-a69b-438e-8bb4-29e528f4a49a', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ location, message, data, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId })
-  }).catch(() => {});
-};
-// #endregion
-
 type Props = {
   initialCats: Cats;
 };
-
-const GridContainer = styled('div', {
-  base: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gridAutoRows: 'calc(100vw / 5)',
-    gap: '2px',
-    lgDown: {
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gridAutoRows: 'calc(100vw / 3)',
-    },
-    mdDown: {
-      gridTemplateColumns: 'repeat(2, 1fr)',
-      gridAutoRows: 'calc(100vw / 2)',
-    },
-    smDown: {
-      gridTemplateColumns: 'repeat(1, 1fr)',
-      gridAutoRows: 'calc(100vw)',
-    },
-  },
-});
-
-const Sentinel = styled('div', {
-  base: {
-    height: '1px',
-    width: '100%',
-  },
-});
 
 export function CatGallery({ initialCats }: Props) {
   // フック内でシャッフルとデータ管理を行う
   const { data, loadMore, hasMore } = useCatsInfinite(initialCats);
   const sentinelRef = useRef<HTMLDivElement>(null);
-
-  // #region agent log
-  useEffect(() => {
-    debugLog('cat-gallery.tsx:CatGallery', 'Client hydration complete', { initialCatsCount: initialCats.length, dataCount: data.length }, 'A');
-  }, []);
-  // #endregion
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -84,7 +40,12 @@ export function CatGallery({ initialCats }: Props) {
 
   return (
     <main>
-      <GridContainer>
+      <styled.div
+        display="grid"
+        gridTemplateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(5, 1fr)' }}
+        gridAutoRows={{ base: 'calc(100vw)', sm: 'calc(100vw / 2)', md: 'calc(100vw / 3)', lg: 'calc(100vw / 5)' }}
+        gap="2px"
+      >
         {data.map((cat, index) => {
           // 最初のビューポートに表示される画像のみ eager で読み込む
           // デスクトップ: 5列 × 2行 = 10枚（Logo.pngがLCP要素なので猫画像の優先度を下げる）
@@ -107,8 +68,8 @@ export function CatGallery({ initialCats }: Props) {
             />
           );
         })}
-      </GridContainer>
-      {hasMore && <Sentinel ref={sentinelRef} />}
+      </styled.div>
+      {hasMore && <styled.div ref={sentinelRef} height="1px" width="100%" />}
     </main>
   );
 }
