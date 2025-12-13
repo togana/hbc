@@ -25,10 +25,6 @@ export const apiClient = {
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers,
-      next: {
-        revalidate: 300,
-        tags: ['cats', options?.params?.toString() ?? '1'],
-      },
     });
 
     if (!response.ok) {
