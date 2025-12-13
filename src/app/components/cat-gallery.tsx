@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { forwardRef } from 'react';
 import Image from 'next/image';
 import { VirtuosoGrid } from 'react-virtuoso';
 import { styled } from '../../styled-system/jsx';
@@ -46,37 +46,9 @@ const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
 });
 ListContainer.displayName = 'List';
 
-const shuffle = <T extends Cats>([...array]: T): T => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array as T;
-};
-
 export function CatGallery({ initialCats }: Props) {
-  const [list, setList] = useState(initialCats);
-  const { data, size, setSize } = useCatsInfinite();
-
-  // クライアント側でのみシャッフルを実行してHydrationエラーを防ぐ
-  useEffect(() => {
-    setTimeout(() => {
-      setList(shuffle([...initialCats]));
-    }, 0);
-  }, [initialCats]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (data && typeof data[size - 1] !== 'undefined') {
-        setList((current) => [...current, ...data[size - 1]]);
-      }
-    };
-    handleScroll();
-  }, [data, size]);
-
-  const loadMore = useCallback(() => {
-    setSize((current) => current + 1);
-  }, [setSize]);
+  // フック内でシャッフルとデータ管理を行う
+  const { data, loadMore } = useCatsInfinite(initialCats);
 
   return (
     <div>
@@ -86,15 +58,15 @@ export function CatGallery({ initialCats }: Props) {
       <main>
         <VirtuosoGrid
           overscan={2500}
-          totalCount={list.length}
+          totalCount={data.length}
           components={{
             List: ListContainer,
           }}
           useWindowScroll={true}
           itemContent={(index) => (
             <Image
-              key={list[index].id}
-              src={list[index].url}
+              key={data[index].id}
+              src={data[index].url}
               loader={imagekitLoader}
               alt=""
               unoptimized

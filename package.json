@@ -19,8 +19,7 @@
     "next": "16.0.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-virtuoso": "4.17.0",
-    "swr": "2.3.7"
+    "react-virtuoso": "4.17.0"
   },
   "devDependencies": {
     "@pandacss/dev": "1.7.0",

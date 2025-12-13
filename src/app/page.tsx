@@ -1,9 +1,19 @@
-import { search } from '../api/external/cats';
+import { cacheLife } from 'next/cache';
+import { search, type Cats } from '../api/external/cats';
 import { CatGallery } from './components/cat-gallery';
 
-export const revalidate = 600;
+const shuffle = <T extends Cats>([...array]: T): T => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array as T;
+};
 
-export default async function Home() {
+async function getInitialCats() {
+  'use cache';
+  cacheLife('minutes');
+
   const catsResponses = await Promise.all(
     [...Array(5)].map(() =>
       search({
@@ -12,7 +22,12 @@ export default async function Home() {
     ),
   );
 
-  const cats = catsResponses.flat();
+  // サーバーサイドでシャッフル（キャッシュされるので一貫性が保たれる）
+  return shuffle(catsResponses.flat());
+}
+
+export default async function Home() {
+  const cats = await getInitialCats();
 
   return <CatGallery initialCats={cats} />;
 }
