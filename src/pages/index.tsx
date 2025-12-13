@@ -2,7 +2,6 @@ import { forwardRef, useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import { down } from 'styled-breakpoints';
 import { VirtuosoGrid } from 'react-virtuoso';
 import { search } from '../api/external/cats';
 import type { Cats } from '../api/external/cats';
@@ -19,17 +18,17 @@ const ListElement = styled.div`
   grid-auto-rows: calc(100vw / 5);
   gap: 2px;
 
-  ${down('lg')} {
+  ${({ theme }) => theme.breakpoints.down('lg')} {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: calc(100vw / 3);
   }
 
-  ${down('md')} {
+  ${({ theme }) => theme.breakpoints.down('md')} {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: calc(100vw / 2);
   }
 
-  ${down('sm')} {
+  ${({ theme }) => theme.breakpoints.down('sm')} {
     grid-template-columns: repeat(1, 1fr);
     grid-auto-rows: calc(100vw);
   }
