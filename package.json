@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "run-p lint:*",
-    "lint:eslint": "next lint",
+    "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
     "lint:tsc": "tsc --noEmit",
     "format": "prettier --write ."
