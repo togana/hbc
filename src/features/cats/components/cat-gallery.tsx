@@ -7,6 +7,16 @@ import type { Cats } from '../api/cats-api';
 import { useCatsInfinite } from '../hooks/use-cats-infinite';
 import imagekitLoader from '../../../lib/imagekit-loader';
 
+// #region agent log
+const debugLog = (location: string, message: string, data: Record<string, unknown>, hypothesisId: string) => {
+  fetch('http://127.0.0.1:7242/ingest/ea7c6cb7-a69b-438e-8bb4-29e528f4a49a', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ location, message, data, timestamp: Date.now(), sessionId: 'debug-session', hypothesisId })
+  }).catch(() => {});
+};
+// #endregion
+
 type Props = {
   initialCats: Cats;
 };
@@ -32,14 +42,6 @@ const GridContainer = styled('div', {
   },
 });
 
-const Header = styled('header', {
-  base: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
 const Sentinel = styled('div', {
   base: {
     height: '1px',
@@ -51,6 +53,12 @@ export function CatGallery({ initialCats }: Props) {
   // フック内でシャッフルとデータ管理を行う
   const { data, loadMore, hasMore } = useCatsInfinite(initialCats);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // #region agent log
+  useEffect(() => {
+    debugLog('cat-gallery.tsx:CatGallery', 'Client hydration complete', { initialCatsCount: initialCats.length, dataCount: data.length }, 'A');
+  }, []);
+  // #endregion
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -75,46 +83,32 @@ export function CatGallery({ initialCats }: Props) {
   }, [loadMore, hasMore]);
 
   return (
-    <div>
-      <Header>
-        <Image
-          src="/Logo.png"
-          alt="logo"
-          fetchPriority="high"
-          width="540"
-          height="283"
-        />
-      </Header>
-      <main>
-        <GridContainer>
-          {data.map((cat, index) => {
-            // 最初のビューポートに表示される画像のみ eager で読み込む
-            // デスクトップ: 5列 × 3行 = 15枚、モバイル: 1列 × 5行 = 5枚を考慮して15枚まで
-            const isAboveFold = index < 15;
-            // LCP要素になる可能性が高い最初の1枚に preload と fetchPriority="high" を設定
-            const isLCPCandidate = index === 0;
-            return (
-              <Image
-                key={cat.id}
-                src={cat.url}
-                loader={imagekitLoader}
-                alt=""
-                width="500"
-                height="500"
-                loading={isAboveFold ? "eager" : "lazy"}
-                preload={isLCPCandidate}
-                fetchPriority={isLCPCandidate ? "high" : undefined}
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            );
-          })}
-        </GridContainer>
-        {hasMore && <Sentinel ref={sentinelRef} />}
-      </main>
-    </div>
+    <main>
+      <GridContainer>
+        {data.map((cat, index) => {
+          // 最初のビューポートに表示される画像のみ eager で読み込む
+          // デスクトップ: 5列 × 2行 = 10枚（Logo.pngがLCP要素なので猫画像の優先度を下げる）
+          const isAboveFold = index < 10;
+          return (
+            <Image
+              key={cat.id}
+              src={cat.url}
+              loader={imagekitLoader}
+              alt=""
+              width={500}
+              height={500}
+              loading={isAboveFold ? "eager" : "lazy"}
+              fetchPriority={index < 5 ? "high" : undefined}
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
+              }}
+            />
+          );
+        })}
+      </GridContainer>
+      {hasMore && <Sentinel ref={sentinelRef} />}
+    </main>
   );
 }
