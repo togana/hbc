@@ -53,7 +53,13 @@ export function CatGallery({ initialCats }: Props) {
   return (
     <div>
       <Header>
-        <Image src="/Logo.png" alt="logo" priority width="540" height="283" />
+        <Image
+          src="/Logo.png"
+          alt="logo"
+          fetchPriority="high"
+          width="540"
+          height="283"
+        />
       </Header>
       <main>
         <VirtuosoGrid
@@ -63,23 +69,28 @@ export function CatGallery({ initialCats }: Props) {
             List: ListContainer,
           }}
           useWindowScroll={true}
-          itemContent={(index) => (
-            <Image
-              key={data[index].id}
-              src={data[index].url}
-              loader={imagekitLoader}
-              alt=""
-              unoptimized
-              width="500"
-              height="500"
-              loading="eager"
-              style={{
-                height: "100%",
-                width: "100%",
-                objectFit: "cover",
-              }}
-            />
-          )}
+          itemContent={(index) => {
+            // 最初のビューポートに表示される画像のみ eager で読み込む
+            // デスクトップ: 5列 × 3行 = 15枚、モバイル: 1列 × 5行 = 5枚を考慮して15枚まで
+            const isAboveFold = index < 15;
+            return (
+              <Image
+                key={data[index].id}
+                src={data[index].url}
+                loader={imagekitLoader}
+                alt=""
+                unoptimized
+                width="500"
+                height="500"
+                loading={isAboveFold ? "eager" : "lazy"}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            );
+          }}
           endReached={loadMore}
         />
       </main>

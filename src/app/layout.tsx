@@ -30,6 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={`${roboto.variable} ${notoSansJP.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />
+      </head>
       <body>{children}</body>
     </html>
   );
