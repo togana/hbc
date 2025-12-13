@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -13,19 +14,17 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@emotion/cache": "11.14.0",
-    "@emotion/react": "11.14.0",
-    "@emotion/styled": "11.14.1",
     "axios": "1.13.2",
     "imagekit": "6.0.0",
     "next": "16.0.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-virtuoso": "4.17.0",
-    "styled-breakpoints": "14.1.5",
     "swr": "2.3.7"
   },
   "devDependencies": {
+    "@pandacss/dev": "1.7.0",
+    "@pandacss/preset-base": "1.7.0",
     "@types/node": "24.10.3",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

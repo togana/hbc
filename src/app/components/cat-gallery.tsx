@@ -2,8 +2,8 @@
 
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-import styled from '@emotion/styled';
 import { VirtuosoGrid } from 'react-virtuoso';
+import { styled } from '../../styled-system/jsx';
 import type { Cats } from '../../api/external/cats';
 import { useCatsInfinite } from '../../hooks/use-cats-infinite';
 import imagekitLoader from '../../lib/imagekit-loader';
@@ -12,38 +12,39 @@ type Props = {
   initialCats: Cats;
 };
 
-const ListElement = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: calc(100vw / 5);
-  gap: 2px;
+const ListElement = styled('div', {
+  base: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(5, 1fr)',
+    gridAutoRows: 'calc(100vw / 5)',
+    gap: '2px',
+    lgDown: {
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gridAutoRows: 'calc(100vw / 3)',
+    },
+    mdDown: {
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gridAutoRows: 'calc(100vw / 2)',
+    },
+    smDown: {
+      gridTemplateColumns: 'repeat(1, 1fr)',
+      gridAutoRows: 'calc(100vw)',
+    },
+  },
+});
 
-  ${({ theme }) => theme.breakpoints.down('lg')} {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: calc(100vw / 3);
-  }
-
-  ${({ theme }) => theme.breakpoints.down('md')} {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: calc(100vw / 2);
-  }
-
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: calc(100vw);
-  }
-`;
+const Header = styled('header', {
+  base: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
   return <ListElement {...props} ref={ref} />;
 });
 ListContainer.displayName = 'List';
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const shuffle = <T extends Cats>([...array]: T): T => {
   for (let i = array.length - 1; i >= 0; i--) {

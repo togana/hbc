@@ -1,6 +1,6 @@
 import { Noto_Sans_JP, Roboto } from 'next/font/google';
 import type { Metadata } from 'next';
-import { Providers } from './providers';
+import '../styled-system/styles.css';
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ['latin'],
@@ -31,9 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={`${roboto.variable} ${notoSansJP.variable}`}>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

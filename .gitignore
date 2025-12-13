@@ -36,4 +36,7 @@ yarn-error.log*
 # vercel
 .vercel
 
+# panda css
+/src/styled-system
+
 tsconfig.tsbuildinfo

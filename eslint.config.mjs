@@ -14,7 +14,16 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    // Panda CSS generated files
+    'src/styled-system/**',
   ]),
+  // Disable import/no-anonymous-default-export for postcss.config.mjs
+  {
+    files: ['postcss.config.mjs'],
+    rules: {
+      'import/no-anonymous-default-export': 'off',
+    },
+  },
 ]);
 
 export default eslintConfig;
