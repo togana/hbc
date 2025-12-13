@@ -1,5 +1,5 @@
 import { search } from '../api/external/cats';
-import { CatGallery } from './components/CatGallery';
+import { CatGallery } from './components/cat-gallery';
 
 export const revalidate = 600;
 

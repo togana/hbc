@@ -5,8 +5,8 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { VirtuosoGrid } from 'react-virtuoso';
 import type { Cats } from '../../api/external/cats';
-import { useCatsInfinite } from '../../hooks/useCatsInfinite';
-import imagekitLoader from '../../lib/imagekitLoader';
+import { useCatsInfinite } from '../../hooks/use-cats-infinite';
+import imagekitLoader from '../../lib/imagekit-loader';
 
 type Props = {
   initialCats: Cats;

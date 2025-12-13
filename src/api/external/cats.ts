@@ -1,5 +1,5 @@
-import { imagekit } from '../../lib/imageKitClient';
-import fetcher from '../../lib/apiClient';
+import { imagekit } from '../../lib/image-kit-client';
+import fetcher from '../../lib/api-client';
 
 type Order = 'desc' | 'asc' | 'random';
 
