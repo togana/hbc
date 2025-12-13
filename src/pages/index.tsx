@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { down } from 'styled-breakpoints';
-import { VirtuosoGrid } from 'react-virtuoso'
+import { VirtuosoGrid } from 'react-virtuoso';
 import { search } from '../api/external/cats';
 import type { Cats } from '../api/external/cats';
 import { useCatsInfinite } from '../hooks/useCatsInfinite';
@@ -36,8 +36,8 @@ const ListElement = styled.div`
 `;
 
 const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
-  return <ListElement {...props} ref={ref} />
-})
+  return <ListElement {...props} ref={ref} />;
+});
 ListContainer.displayName = 'List';
 
 const Header = styled.header`
@@ -60,10 +60,7 @@ export default function Home({ cats }: Props): JSX.Element {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        data &&
-        typeof data[size - 1] !== 'undefined'
-      ) {
+      if (data && typeof data[size - 1] !== 'undefined') {
         setList((current) => [...current, ...data[size - 1]]);
       }
     };
@@ -72,7 +69,7 @@ export default function Home({ cats }: Props): JSX.Element {
 
   const loadMore = useCallback(() => {
     setSize((current) => current + 1);
-  }, [setSize])
+  }, [setSize]);
 
   return (
     <div>
@@ -91,21 +88,22 @@ export default function Home({ cats }: Props): JSX.Element {
             List: ListContainer,
           }}
           useWindowScroll={true}
-          itemContent={(index) => <Image
-            key={list[index].id}
-            src={list[index].url}
-            loader={imagekitLoader}
-            alt=""
-            unoptimized
-            width="500"
-            height="500"
-            loading="eager"
-            style={{
-              maxHeight: '100%',
-              objectFit: 'cover',
-            }}
-          />
-          }
+          itemContent={(index) => (
+            <Image
+              key={list[index].id}
+              src={list[index].url}
+              loader={imagekitLoader}
+              alt=""
+              unoptimized
+              width="500"
+              height="500"
+              loading="eager"
+              style={{
+                maxHeight: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          )}
           endReached={loadMore}
         />
       </main>
