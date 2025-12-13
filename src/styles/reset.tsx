@@ -1,6 +1,6 @@
 import { css, Global } from '@emotion/react';
 
-export const globalStyles = (
+export const resetStyles = (
   <Global
     styles={css`
       /***
@@ -123,17 +123,6 @@ export const globalStyles = (
       /* Remove details summary webkit styles */
       ::-webkit-details-marker {
         display: none;
-      }
-
-      // Global styles
-      html,
-      body {
-        padding: 0;
-        margin: 0;
-        min-height: 100%;
-        background-color: #000;
-        font-family: 'Roboto', 'Noto Sans JP', sans-serif;
-        font-size: 16px;
       }
     `}
   />
