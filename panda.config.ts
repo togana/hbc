@@ -25,4 +25,6 @@ export default defineConfig({
   },
   jsxFramework: 'react',
   outdir: 'src/styled-system',
+  minify: true,
+  hash: true,
 });
