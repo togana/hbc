@@ -36,7 +36,7 @@ export const search = async ({
       transformation: [
         {
           width: '500',
-          quality: '75',
+          quality: '65',
         },
       ],
       signed: true,

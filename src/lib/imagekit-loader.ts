@@ -7,7 +7,7 @@ const loader = ({ src, width, quality }: ImageLoaderProps): string => {
     return src;
   }
 
-  return `${baseUrl}${src}?tr=w-${width}&q=${quality || 75}`;
+  return `${baseUrl}${src}?tr=w-${width}&q=${quality || 65}`;
 };
 
 export default loader;
