@@ -1,16 +1,9 @@
 import { cacheLife } from 'next/cache';
 import Image from 'next/image';
 import { styled } from '../styled-system/jsx';
-import { search, type Cats } from '../features/cats/api/cats-api';
+import { search } from '../features/cats/api/cats-api';
 import { CatGallery } from '../features/cats/components/cat-gallery';
-
-const shuffle = <T extends Cats>([...array]: T): T => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array as T;
-};
+import { shuffle } from '../lib/utils/shuffle';
 
 async function getInitialCats() {
   'use cache';

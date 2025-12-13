@@ -17,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://ik.imagekit.io"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>{children}</body>
     </html>

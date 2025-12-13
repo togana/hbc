@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cacheLife } from 'next/cache';
 import { search } from '../../../../features/cats/api/cats-api';
-import type { Cats } from '../../../../features/cats/api/cats-api';
+import type { Cats } from '../../../../features/cats/types';
+import { CATS_API } from '../../../../features/cats/constants';
 
-const inRange = (x: number, min: number, max: number): boolean => {
-  return (x - min) * (x - max) <= 0;
+const isValidPage = (page: number): boolean => {
+  return page >= CATS_API.MIN_PAGE && page <= CATS_API.MAX_PAGE;
 };
 
 async function fetchCats(page: number): Promise<Cats> {
@@ -13,7 +14,7 @@ async function fetchCats(page: number): Promise<Cats> {
 
   return await search({
     page,
-    limit: 50,
+    limit: CATS_API.DEFAULT_LIMIT,
     order: 'random',
   });
 }
@@ -22,8 +23,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<Cats>> {
   const searchParams = request.nextUrl.searchParams;
   const page = Number(searchParams.get('page') || 1);
 
-  // 1~50以外の値の場合は一旦バリデーションエラにする
-  if (!inRange(page, 0, 50)) {
+  if (!isValidPage(page)) {
     return NextResponse.json([], { status: 422 });
   }
 

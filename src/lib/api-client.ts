@@ -1,3 +1,5 @@
+import { ApiError } from './errors';
+
 const headers = {
   'x-api-key': process.env.API_KEY ?? '',
 };
@@ -30,7 +32,10 @@ export const apiClient = {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        response.status,
+      );
     }
 
     const data = await response.json();

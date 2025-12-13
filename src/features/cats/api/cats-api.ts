@@ -1,24 +1,13 @@
-import { imagekit } from '../../../lib/image-kit-client';
 import apiClient from '../../../lib/api-client';
+import { createSignedUrl } from '../../../lib/imagekit';
+import type { Cat, Cats, CatsRequest } from '../types';
+import { CATS_API } from '../constants';
 
-type Order = 'desc' | 'asc' | 'random';
-
-export type CatsRequest = {
-  order?: Order;
-  page?: number;
-  limit?: number;
-};
-
-type Cat = {
-  id: string;
-  url: string;
-};
-
-export type Cats = Cat[];
+export type { Cat, Cats, CatsRequest };
 
 export const search = async ({
   page = 1,
-  limit = 50,
+  limit = CATS_API.DEFAULT_LIMIT,
   order: order = 'desc',
 }: CatsRequest): Promise<Cats> => {
   const res = await apiClient.get<Cats>('/v1/images/search', {
@@ -30,22 +19,8 @@ export const search = async ({
     },
   });
 
-  const signedUrls = res.data.map((cat) => {
-    const imageURL = imagekit.url({
-      path: encodeURIComponent(cat.url),
-      transformation: [
-        {
-          width: '500',
-          quality: '65',
-        },
-      ],
-      signed: true,
-      expireSeconds: 3600 * 24,
-    });
-    return {
-      id: cat.id,
-      url: imageURL,
-    };
-  });
-  return signedUrls;
+  return res.data.map((cat) => ({
+    id: cat.id,
+    url: createSignedUrl(cat.url),
+  }));
 };
