@@ -3,7 +3,7 @@ import { ThemeProvider } from '@emotion/react';
 import { globalStyles } from '../styles';
 import { theme } from '../theme';
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({ Component, pageProps }: AppProps): React.ReactElement {
   return (
     <ThemeProvider theme={theme}>
       {globalStyles}

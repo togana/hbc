@@ -53,7 +53,7 @@ const shuffle = <T extends Cats>([...array]: T): T => {
   return array as T;
 };
 
-export default function Home({ cats }: Props): JSX.Element {
+export default function Home({ cats }: Props): React.ReactElement {
   const [list, setList] = useState(shuffle(cats));
   const { data, size, setSize } = useCatsInfinite();
 
