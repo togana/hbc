@@ -55,6 +55,7 @@ export function CatGallery({ initialCats }: Props) {
               key={cat.id}
               src={cat.url}
               loader={imagekitLoader}
+              unoptimized
               alt=""
               width={500}
               height={500}
