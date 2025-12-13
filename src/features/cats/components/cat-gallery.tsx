@@ -5,7 +5,7 @@ import { styled } from '../../../styled-system/jsx';
 import type { Cats } from '../types';
 import { useCatsInfinite } from '../hooks/use-cats-infinite';
 import { useInfiniteScroll } from '../../../lib/hooks/use-infinite-scroll';
-import imagekitLoader from '../../../lib/imagekit/loader';
+import { imagekitLoader } from '../../../lib/imagekit/loader';
 
 type Props = {
   initialCats: Cats;

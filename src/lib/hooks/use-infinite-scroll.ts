@@ -7,6 +7,14 @@ type UseInfiniteScrollOptions = {
   enabled?: boolean;
 };
 
+/**
+ * 無限スクロール用のカスタムフック
+ *
+ * @param onIntersect - 要素が交差したときに呼び出されるコールバック。
+ *                      パフォーマンスのため、useCallback でラップすることを推奨します。
+ * @param options - オプション設定
+ * @returns センチネル要素に割り当てる ref
+ */
 export const useInfiniteScroll = (
   onIntersect: () => void,
   options: UseInfiniteScrollOptions = {},
