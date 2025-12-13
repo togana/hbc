@@ -81,7 +81,6 @@ export function CatGallery({ initialCats }: Props) {
                 src={data[index].url}
                 loader={imagekitLoader}
                 alt=""
-                unoptimized
                 width="500"
                 height="500"
                 loading={isAboveFold ? "eager" : "lazy"}
