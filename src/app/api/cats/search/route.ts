@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cacheLife } from 'next/cache';
-import { search } from '../../../../api/external/cats';
-import type { Cats } from '../../../../api/external/cats';
+import { search } from '../../../../features/cats/api/cats-api';
+import type { Cats } from '../../../../features/cats/api/cats-api';
 
 const inRange = (x: number, min: number, max: number): boolean => {
   return (x - min) * (x - max) <= 0;

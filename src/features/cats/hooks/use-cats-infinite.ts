@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import type { Cats } from '../api/external/cats';
+import type { Cats } from '../api/cats-api';
 
 type UseCatsInfiniteReturn = {
   data: Cats;

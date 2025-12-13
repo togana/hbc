@@ -1,6 +1,6 @@
 import { cacheLife } from 'next/cache';
-import { search, type Cats } from '../api/external/cats';
-import { CatGallery } from './components/cat-gallery';
+import { search, type Cats } from '../features/cats/api/cats-api';
+import { CatGallery } from '../features/cats/components/cat-gallery';
 
 const shuffle = <T extends Cats>([...array]: T): T => {
   for (let i = array.length - 1; i >= 0; i--) {

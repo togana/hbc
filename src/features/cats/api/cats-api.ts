@@ -1,5 +1,5 @@
-import { imagekit } from '../../lib/image-kit-client';
-import apiClient from '../../lib/api-client';
+import { imagekit } from '../../../lib/image-kit-client';
+import apiClient from '../../../lib/api-client';
 
 type Order = 'desc' | 'asc' | 'random';
 

@@ -3,10 +3,10 @@
 import { forwardRef } from 'react';
 import Image from 'next/image';
 import { VirtuosoGrid } from 'react-virtuoso';
-import { styled } from '../../styled-system/jsx';
-import type { Cats } from '../../api/external/cats';
-import { useCatsInfinite } from '../../hooks/use-cats-infinite';
-import imagekitLoader from '../../lib/imagekit-loader';
+import { styled } from '../../../styled-system/jsx';
+import type { Cats } from '../api/cats-api';
+import { useCatsInfinite } from '../hooks/use-cats-infinite';
+import imagekitLoader from '../../../lib/imagekit-loader';
 
 type Props = {
   initialCats: Cats;
@@ -74,8 +74,9 @@ export function CatGallery({ initialCats }: Props) {
               height="500"
               loading="eager"
               style={{
-                maxHeight: '100%',
-                objectFit: 'cover',
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
               }}
             />
           )}
