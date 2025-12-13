@@ -23,6 +23,7 @@ export const apiClient = {
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers,
+      cache: 'force-cache',
     });
 
     if (!response.ok) {
