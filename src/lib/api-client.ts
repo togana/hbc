@@ -11,7 +11,7 @@ type RequestOptions = {
 export const apiClient = {
   async get<T>(path: string, options?: RequestOptions): Promise<{ data: T }> {
     const url = new URL(path, baseURL);
-    
+
     if (options?.params) {
       Object.entries(options.params).forEach(([key, value]) => {
         if (value !== undefined) {
