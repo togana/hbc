@@ -1,12 +1,37 @@
-import axios from 'axios';
-
 const headers = {
   'x-api-key': process.env.API_KEY ?? '',
 };
 
-const instance = axios.create({
-  baseURL: process.env.BASE_URL,
-  headers,
-});
+const baseURL = process.env.BASE_URL ?? '';
 
-export default instance;
+type RequestOptions = {
+  params?: Record<string, string | number | undefined>;
+};
+
+export const apiClient = {
+  async get<T>(path: string, options?: RequestOptions): Promise<{ data: T }> {
+    const url = new URL(path, baseURL);
+    
+    if (options?.params) {
+      Object.entries(options.params).forEach(([key, value]) => {
+        if (value !== undefined) {
+          url.searchParams.append(key, String(value));
+        }
+      });
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return { data };
+  },
+};
+
+export default apiClient;

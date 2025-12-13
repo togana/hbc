@@ -1,5 +1,5 @@
 import { imagekit } from '../../lib/image-kit-client';
-import fetcher from '../../lib/api-client';
+import apiClient from '../../lib/api-client';
 
 type Order = 'desc' | 'asc' | 'random';
 
@@ -21,7 +21,7 @@ export const search = async ({
   limit = 50,
   order: order = 'desc',
 }: CatsRequest): Promise<Cats> => {
-  const res = await fetcher.get<Cats>('/v1/images/search', {
+  const res = await apiClient.get<Cats>('/v1/images/search', {
     params: {
       page,
       limit,
