@@ -12,7 +12,19 @@ type UseCatsInfiniteReturn = {
 export const useCatsInfinite = (
   initialData: Cats = [],
 ): UseCatsInfiniteReturn => {
-  const [data, setData] = useState<Cats>(initialData);
+  // 初期データから重複を排除
+  const getUniqueCats = (cats: Cats): Cats => {
+    const seenIds = new Set<string>();
+    return cats.filter((cat) => {
+      if (seenIds.has(cat.id)) {
+        return false;
+      }
+      seenIds.add(cat.id);
+      return true;
+    });
+  };
+
+  const [data, setData] = useState<Cats>(() => getUniqueCats(initialData));
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(true);
@@ -37,7 +49,13 @@ export const useCatsInfinite = (
       if (newCats.length === 0) {
         setHasMore(false);
       } else {
-        setData((current) => [...current, ...newCats]);
+        setData((current) => {
+          // 既存のIDのセットを作成
+          const existingIds = new Set(current.map((cat) => cat.id));
+          // 新しいデータから重複を除外
+          const uniqueNewCats = newCats.filter((cat) => !existingIds.has(cat.id));
+          return [...current, ...uniqueNewCats];
+        });
         pageRef.current = nextPage;
       }
     } catch (err) {

@@ -1,8 +1,7 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { VirtuosoGrid } from 'react-virtuoso';
 import { styled } from '../../../styled-system/jsx';
 import type { Cats } from '../api/cats-api';
 import { useCatsInfinite } from '../hooks/use-cats-infinite';
@@ -12,7 +11,7 @@ type Props = {
   initialCats: Cats;
 };
 
-const ListElement = styled('div', {
+const GridContainer = styled('div', {
   base: {
     display: 'grid',
     gridTemplateColumns: 'repeat(5, 1fr)',
@@ -41,14 +40,39 @@ const Header = styled('header', {
   },
 });
 
-const ListContainer = forwardRef<HTMLDivElement>((props, ref) => {
-  return <ListElement {...props} ref={ref} />;
+const Sentinel = styled('div', {
+  base: {
+    height: '1px',
+    width: '100%',
+  },
 });
-ListContainer.displayName = 'List';
 
 export function CatGallery({ initialCats }: Props) {
   // フック内でシャッフルとデータ管理を行う
-  const { data, loadMore } = useCatsInfinite(initialCats);
+  const { data, loadMore, hasMore } = useCatsInfinite(initialCats);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        rootMargin: '100px', // 100px手前で読み込み開始
+      }
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [loadMore, hasMore]);
 
   return (
     <div>
@@ -62,14 +86,8 @@ export function CatGallery({ initialCats }: Props) {
         />
       </Header>
       <main>
-        <VirtuosoGrid
-          overscan={2500}
-          totalCount={data.length}
-          components={{
-            List: ListContainer,
-          }}
-          useWindowScroll={true}
-          itemContent={(index) => {
+        <GridContainer>
+          {data.map((cat, index) => {
             // 最初のビューポートに表示される画像のみ eager で読み込む
             // デスクトップ: 5列 × 3行 = 15枚、モバイル: 1列 × 5行 = 5枚を考慮して15枚まで
             const isAboveFold = index < 15;
@@ -77,8 +95,8 @@ export function CatGallery({ initialCats }: Props) {
             const isLCPCandidate = index === 0;
             return (
               <Image
-                key={data[index].id}
-                src={data[index].url}
+                key={cat.id}
+                src={cat.url}
                 loader={imagekitLoader}
                 alt=""
                 width="500"
@@ -93,9 +111,9 @@ export function CatGallery({ initialCats }: Props) {
                 }}
               />
             );
-          }}
-          endReached={loadMore}
-        />
+          })}
+        </GridContainer>
+        {hasMore && <Sentinel ref={sentinelRef} />}
       </main>
     </div>
   );
