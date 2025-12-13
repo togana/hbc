@@ -73,6 +73,9 @@ export function CatGallery({ initialCats }: Props) {
             // 最初のビューポートに表示される画像のみ eager で読み込む
             // デスクトップ: 5列 × 3行 = 15枚、モバイル: 1列 × 5行 = 5枚を考慮して15枚まで
             const isAboveFold = index < 15;
+            // LCP要素になる可能性が高い最初の5枚に fetchPriority="high" を設定
+            // （グリッドレイアウトで最初の行に表示される画像をカバー）
+            const isLCPCandidate = index < 5;
             return (
               <Image
                 key={data[index].id}
@@ -83,6 +86,7 @@ export function CatGallery({ initialCats }: Props) {
                 width="500"
                 height="500"
                 loading={isAboveFold ? "eager" : "lazy"}
+                fetchPriority={isLCPCandidate ? "high" : undefined}
                 style={{
                   height: "100%",
                   width: "100%",
