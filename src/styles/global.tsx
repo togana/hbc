@@ -10,7 +10,7 @@ export const globalStyles = (
         margin: 0;
         min-height: 100%;
         background-color: #000;
-        font-family: 'Roboto', 'Noto Sans JP', sans-serif;
+        font-family: var(--font-roboto), var(--font-noto-sans-jp), sans-serif;
         font-size: 16px;
       }
     `}

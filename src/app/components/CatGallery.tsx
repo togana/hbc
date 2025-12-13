@@ -1,15 +1,15 @@
+'use client';
+
 import { forwardRef, useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { VirtuosoGrid } from 'react-virtuoso';
-import { search } from '../api/external/cats';
-import type { Cats } from '../api/external/cats';
-import { useCatsInfinite } from '../hooks/useCatsInfinite';
-import imagekitLoader from '../lib/imagekitLoader';
+import type { Cats } from '../../api/external/cats';
+import { useCatsInfinite } from '../../hooks/useCatsInfinite';
+import imagekitLoader from '../../lib/imagekitLoader';
 
 type Props = {
-  cats: Cats;
+  initialCats: Cats;
 };
 
 const ListElement = styled.div`
@@ -53,9 +53,16 @@ const shuffle = <T extends Cats>([...array]: T): T => {
   return array as T;
 };
 
-export default function Home({ cats }: Props): React.ReactElement {
-  const [list, setList] = useState(shuffle(cats));
+export function CatGallery({ initialCats }: Props) {
+  const [list, setList] = useState(initialCats);
   const { data, size, setSize } = useCatsInfinite();
+
+  // クライアント側でのみシャッフルを実行してHydrationエラーを防ぐ
+  useEffect(() => {
+    setTimeout(() => {
+      setList(shuffle([...initialCats]));
+    }, 0);
+  }, [initialCats]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,10 +79,6 @@ export default function Home({ cats }: Props): React.ReactElement {
 
   return (
     <div>
-      <Head>
-        <title>Healing by cat</title>
-      </Head>
-
       <Header>
         <Image src="/Logo.png" alt="logo" priority width="540" height="283" />
       </Header>
@@ -108,24 +111,4 @@ export default function Home({ cats }: Props): React.ReactElement {
       </main>
     </div>
   );
-}
-
-export async function getStaticProps(): Promise<{
-  props: Props;
-  revalidate: number;
-}> {
-  const catsResponses = await Promise.all(
-    [...Array(5)].map(() =>
-      search({
-        order: 'random',
-      }),
-    ),
-  );
-
-  return {
-    props: {
-      cats: catsResponses.flat(),
-    },
-    revalidate: 600,
-  };
 }
